@@ -1,0 +1,127 @@
+<html>
+<head>
+	<link href="common.css" rel=stylesheet type="text/css">
+</head>
+<body>
+	<header>Events</header>
+	<section>
+<p>Events represent, for lack of a better word, events.  Perhaps a mouse click or a message recieved by a web socket.  Something happened that someone felt was important enough to enable a script to deal with it.  Events do nothing in and of themselves except to trigger a message.  A script must be listening for that message in order to handle it.  Not suprisingly, that code is called an event listener or handler.</p>
+
+<p>For more information about handling events, see my notes on <a href="event listeners.html">event listeners</a>.</p>
+
+<p>There are many many many predefined events.  A very few of them are: </p>
+
+<pre>
+change
+click
+close
+focus
+load
+keydown
+keyup
+message
+</pre>
+
+<p>All of them can be referenced with the generic <cite>.addEventListener()</cite> or <cite>.on()</cite> methods.  Both are methods of all elements in the DOM.</p>
+
+<pre>
+input.addEventListener ("change", ...
+
+input.on ("change", ...
+</pre>
+
+<p>Many element have hooks to event handlers and an application can use these hooks to assign an event handler to it.  Keep in mind that these hooks are <i>properties</i> and not methods and the application must assign the event handler.  The name is simply the name of the event appended to the word 'on'.</p>
+
+<pre>
+input.onfocus = function() { ... };
+</pre>
+
+<p>These hooks are only available on objects where the action is possible.  For instance, the <cite>&lt;div&gt;</cite> element doesn't support <cite>onfocus</cite>.</p>
+
+<p>One significant difference is that these hooks can reference the object that triggered the event with <cite>this</cite>.</p>
+
+<pre>
+input.onfocus = function() { this.select() };
+</pre>
+
+<p>And can also be referenced directly in HTML:</p>
+
+<pre>
+&lt;input.type="text" onfocus="this.select();"&gt;
+</pre>
+	</section>
+	<section>
+<div>Custom Events</div>
+<p>Sometimes it becomes necessary to create a custom event, and JavaScript provides two ways to do that:</p>
+
+<pre>
+<span class="code">const event = new Event ("event name");
+
+<span class="code">const event = new CustomEvent ("event name", { detail: { ... } );
+</pre>
+
+<p>Event names are case insensitive, ie: <cite>eventname</cite>, <cite>EVENTNAME</cite> and <cite>eVeNtNaMe</cite> are equivalent.</p>
+
+<p>Both take an optional parameter specifying behavior of the event.</p>
+
+<pre>
+{
+    bubbles:	true / false,
+    cancelable:	true / false,
+    composed:	true / false
+}
+</pre>
+
+<p><cite>bubbles</cite> controls whether the custom event will bubble up through the DOM hierarchy.  That simply means that an element can trigger an event and if not handled by that element its parent element will see it.  If not handled by the parent, its grandparent element will see it.  And so forth all the way to the document or window object.  Most normal JavaScript events bubble up.</p>
+
+<p>To illustrate, let's create some arbitrary elements.  The only important thing about these elements is that they are nested within each other &mdash; grandparent contains parent and parent contains child:
+
+<pre>
+const grandparent = document.createElement ("main");
+document.append (grandparent);
+
+const parent = document.createElement ("section");
+grandparent.append (parent);
+
+const child = document.createElement ("div");
+parent.append (child);
+
+child.dispatchEvent (new Event ("customevent"));
+
+document.addEventListener ("customevent", event =>
+    {
+	//  The event will bubble through the DOM hierarchy and is eventually handled here
+    });
+</pre>
+
+
+<p><cite>bubbles</cite> defaults to false.  If <cite>bubbles</cite> is false, <cite>composed</cite> will have no effect.</p>
+
+<p><cite>cancelable</cite> enables or disables <cite>event.preventDefault()</cite>.  It defaults to false; <cite>event.preventDefault()</cite> will have no effect (but then again there is no default behavior for a custom event).</p>
+
+<p>All normal JavaScript events are cancelable by default.</p>
+
+
+<p>The primary difference between Event and CustomEvent is that CustomEvent is able to convey data to the event handler.  It's accessed by the detail property of the event object.</p>
+
+<pre>
+event.detail.someProperty
+</pre>
+	</section>
+	<section>
+		<div>Triggering Custom Events</div>
+<p>Custom events are dispatched (not triggered) by the <cite>.dispatchEvent()</cite> method.  This method appears to be available to all elements.</p>
+
+<pre>
+const customevent = new Event ("customevent");
+document.dispatchEvent (customevent);
+</pre>
+
+<p>or...</p>
+
+<pre>
+document.dispatchEvent (new Event ("customevent"));
+</pre>
+	</section>
+</body>
+</html>

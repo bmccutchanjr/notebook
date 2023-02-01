@@ -1,0 +1,86 @@
+<html>
+<head>
+	<link href="../common.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<header>BASH</header>
+
+<p>BASH is one of several command line interfaces (CLI) to come out of the UNIX world.  Most are still only used exclusively with UNIX or derivatives of UNIX, like Linux.  For the most part, they were developed at universities in the early days of computing, before things like operating systems and CLIs were standardized.  So one may have been created at Stanford, another at Berkeley, still another at MIT, etc.  They all serve the same purpose (mostly file manipulation) and have similar commands.</p>
+
+<p>Many CLIs are derivatives (maybe later generation is more descriptive, if less accurate) of a previous CLI and there are several with three or four (maybe more) such generations.  Derivatives don't usually change the commands or syntax of the previous version (although they might) and instead add commands not supported in a previous incarnation.</p>
+
+<p>Derivative CLIs are usually given a new name evocative of the original; SH begat BASH.</p>
+
+<p>CLIs can seem daunting, with a veritable forest of commands to perform simple functions like naming files, and not always intuitive command names and nomenclature.  It seems easier that it would be easier to point and click to access these sames functions from a GUI.  Although, perhaps more intuitive, GUIs are less efficient to use.  Hands and minds must shift from keyboard to mouse and interfaces must be navigated to find the functions required.</p>
+
+<p>CLIs have a single interface -- the command line.  All commands are valid input at all times.  Simple functionality can be accessed directly by typing, usually, simple commands.  CLIs are generally more efficient than GUIs.</p>
+
+<p>Windows has it's own CLI that serves the same purpose as the various UNIX CLIs.  It started out as the MS-DOS command line, which in turn was based on CP/M and to a lesser extent IBM's mainframe DOS.  Over time it has adopted many of the commands found in UNIX CLIs, and there a number of commands specific to the Windows environment.  Although there are versions of most UNIX CLIs ported to Windows, they aren't necessary nor all that much superior to MS-DOS.  As such, they are somewhat rare and generally serve niche markets.</p>
+
+<p>One of those markets is computer programming, especially those products and services that are cross-platform.  Web browsers and the Internet are common examples.  Both were originally developed in academic environments (where UNIX was far more prevalent than Windows) and both were originally and intentionally ignored by Microsoft.</p>
+
+<p>As a result UNIX CLIs have found a place among programmers, even in a Windows environment.</p>
+
+<section>
+	<div>Common BASH Commands</div>
+
+<table>
+	<tr>
+		<td><cite>cd</cite></td>
+		<td>Change Directory</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<p><cite>cd</cite> needs to find the specified directory and really only has two possible starting references: the current directory and the root directory of the file system.</p>
+			<p>Although you could type the fully-qualified paths and name of each file, every time, no one really wants to and a simple spelling mistake can invalidate the command causing it to fail or could result in moving the file to the wrong location, possibly causing it to be lost.  Luckily, the file structure also maintains references to the current directory and its parent which make it possible to enter relative paths to the resource and shorten the file path considerably.</p>
+			<table>
+				<tr>
+					<td><cite>.</cite></td>
+					<td>the current directory</td>
+				</tr>
+				<tr>
+					<td><cite>..</cite></td>
+					<td>the parent directory</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td><cite>explorer</cite></td>
+		<td>Edit a file (Windows only)</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>
+			<p>Invokes the Windows launcher to open the indicated file with an appropriate editor of viewer.  The application will be launched in a window.</p>
+		</td>
+	</tr>
+	<tr>
+		<td><cite>mkdir</cite></td>
+		<td>Make a Directory</td>
+	</tr>
+	<tr>
+		<td><cite>mv</cite></td>
+		<td>Move a file or directory</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>This is one of the less intuitive aspects of UNIX CLIs. BASH and most UNIX CLIs do not have a separate command to rename a file or directory.  Instead, <cite>mv</cite> is used to do both.</td>
+	</tr>
+	<tr>
+		<td><cite>rm</cite></td>
+		<td>Remove a file</td>
+	</tr>
+	<tr>
+		<td><cite>rmdir</cite></td>
+		<td>Remove Directory</td>
+	</tr>
+	<tr>
+		<td><cite>touch</cite></td>
+		<td>Create a file</td>
+	</tr>
+</table>
+</section>
+</body>
+</html>

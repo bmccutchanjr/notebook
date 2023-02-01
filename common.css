@@ -1,0 +1,84 @@
+*
+{
+	font-family: inherit;
+	font-size: inherit;
+	margin: 0px;
+	padding: 0px;
+}
+
+:root
+{
+	--example-code: #00006f;
+	--paragraph-spacing: 8px;
+	--width: 80%;
+}
+
+body
+{
+	--padding: 25px;
+	font-family: sans-serif;
+	font-size: 14px;
+	height: 100%;
+		min-height: 100%;
+	padding-left: var(--padding);
+	padding-right: var(--padding);
+}
+
+header
+{
+	font-size: 20px;
+	font-weight: bold;
+}
+
+section
+{
+	margin-top: 25px;
+}
+
+section div:first-child
+{
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+p
+{
+	margin-top: var(--paragraph-spacing);
+}
+
+p:first-child,
+section:first-child
+{
+	margin-top: 0px;
+}
+
+pre
+{
+	color: var(--example-code);
+	margin: var(--paragraph-spacing) auto;
+	width: var(--width);
+}
+
+cite
+{
+	color: var(--example-code);
+	font-family: monospace;
+	font-style: normal;
+}
+
+table
+{
+	margin: var(--paragraph-spacing) auto;
+	width: var(--width);
+}
+
+tr
+{
+	margin-top: var(--paragraph-spacing);
+}
+
+td
+{
+	min-width: 100px;
+}

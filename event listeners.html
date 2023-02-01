@@ -1,0 +1,171 @@
+<html>
+<head>
+	<link href="common.css" rel=stylesheet type="text/css">
+</head>
+<body>
+	<header>Events</header>
+	<section>
+<p>Event are simply things that happen during the life of an application.  Events can be triggered by the user interacting with a web page (perhaps clicking on a button) or they can be emitted by the operating system in responce to something (a user requesting a web page, an error, etc).</p>
+
+<p>There are a very large number of events that can be triggered by an application.</p>
+
+<p>To use an event, an application needs an event listener, sometimes called an event handler.  Some people, and perhaps some programming languages, make a distinction between the listener and the handler, but in JavaScript the two are synonomous.</p>
+
+<p>Event listeners can be coded multiple ways...</p>
+
+<pre>
+object.addEventListener ("click", event =>
+{
+    //	some code...
+}
+
+object.on ("click", event =>
+{
+    //	some code...
+}
+</pre>
+
+<p>And with event specific hooks available on most DOM elements.</p>
+
+<pre>
+object.onclick = function()
+{
+     //	some code...
+}
+</pre>
+
+<p>These hooks are only available on objects where the action is possible.  For instance, the <cite>&lt;div&gt;</cite> element doesn't support <cite>onfocus</cite>.</p>
+
+<p>One significant difference is that these hooks can reference the object that triggered the event with <cite>this</cite>.</p>
+
+<pre>
+input.onfocus = function() { this.select() };
+</pre>
+
+<p>And can also be referenced directly in HTML:</p>
+
+<pre>
+&lt;input.type="text" onfocus="this.select();"&gt;
+</pre>
+
+<p>Note that the syntax always requires an in-line function (or callback), this will be important a little later.</p>
+
+<p>Event listeners do not return a value...there's really nothing to return it to anyway.</p>
+
+<p>Most, if not all, events pass an Event object to the listener.  The Event object identifies the object and and any pertinant information needed to handle it.  Click events include the x and y coordinates of the mouse when it was clicked.</p>
+
+<p>The other thing of importance is that event listeners are independent of the fumction or application that created them.  For all intent and purpose, event handlers belong to the operating system, you're just giving it an avenue to communicate directly with your application.  And that means that event handlers may not end when your application ends.  They can remain in active memory, using RAM and CPU cycles.  Orphan enough event listeners and it will eventually affect the performance of the system.</p>
+
+<p>One element can have any number of event listeners associated with it.  Usually for different events, but not necessarilly.  It is perfectly acceptable to have multiple event listeners for the same event on the same object.  They will all be triggered.</p>
+	</section>
+
+	<section>
+		<div>The Event Target</div>
+
+<p>Events aren't much good if you can't determine what element triggered it.  The <cite>.target</cite> property of the Event object is a reference to the triggering element.</p>
+
+<pre>event.target</pre>
+
+<p>Because <cite>event.target</cite> is a reference to the element that triggered the event it can be accessed and manipulated in any manner that object could/</p>
+	</section>
+
+
+	<section>
+		<div>Events "Bubble Up"</div>
+
+<p>That's just JavaScript lingo that means unhandled events will trigger the same event on the parent of the original triggering element in the next <i>event cycle</i>.  If not handled by the parent element, an event will be triggered on the next highest element in the DOM heirachy, and so on, until the document or window object is triggered.</p>
+
+<p>If it's still not handled, the event is discarded.</p>
+
+<p>To illustrate, let's create some arbitrary elements.  The only important thing about these elements is that they are nested within each other &mdash; grandparent contains parent and parent contains child:
+
+<pre>
+const grandparent = document.createElement ("main");
+document.append (grandparent);
+
+const parent = document.createElement ("section");
+grandparent.append (parent);
+
+const child = document.createElement ("div");
+parent.append (child);
+
+child.dispatchEvent (new Event ("customevent"));
+
+document.addEventListener ("customevent", event =>
+    {
+	//  The event will bubble through the DOM hierarchy and is eventually handled here
+    });
+</pre>
+
+<p>This would allow a single event listener on a parent element to handle similar events on any number of children,  If a <cite>&lt;div&gt;</cite> contains several buttons, it may make sense to add the event listener to the parent <cite>&lt;div&gt;</cite> rather than adding an event listener to each <cite>&lt;button&gt;</cite>.</p>
+
+<p>Event listeners are small programs, each taking up space in memory.  Enough event listeners (and possibly a very large number) can slow down the application or even make it unstable.</p>
+	</section>
+
+	<section>
+		<div>Removing Event Handlers</div>
+<p>Event listeners should be automatically removed from memory when the element they're attached to is removed from the DOM, like when a page is unloaded.</p>
+
+<p>There's nothing wrong with an anonymous callback.  If the handler is short enough that it doesn't obfuscate the surrounding code, and if its unique and will be used throughout the lifetime of the page, it may be easier and simpler to code it in-line.</p>
+
+<pre>
+object.on ("click", event =>
+{
+    event.preventDefault();
+
+    //
+    //	perform some appropriate action here...
+    //
+}
+</pre>
+
+<p>But there are times when the application may want to explicitly remove an event handler to prevent subsequent execution, or even change the behavior.  Fortunately, removing an event handler is almost as easy as assigning one.  But because you can have any number of event handlers for the same event, you have to reference the object, the event AND the handler to remove.</p>
+
+<pre>
+object.removeListener (<i>event name</i>, <i>handler</i>);
+</pre>
+
+<p>Remember what I said about anonymous in-line functions (callbacks).  The callback in the example above is anonymous, it has no name nor is there any other reference to it.  That event listener can't be removed.</p>
+
+<p>However, this event handler does have a name.  It can be removed.</p>
+
+<pre>
+object.on ("click", event => handleTheEvent );
+
+function handleTheEvent (event)
+{
+    event.preventDefault();
+
+    //
+    //	perform some appropriate action here...
+    //
+}
+</pre>
+
+<p>It can be removed.</p>
+
+<pre>
+object.removeListener ("click", handleTheEvent );
+</pre>
+	</section>
+
+	<section>
+		<div>Preventing Default Behaviors</div>
+
+<p>Most DOM elements have built in behaviors as defined by the standards.  And often those behaviors will interfere with the behavior you're trying to implement.  Fortunately, there is a fix for that.</p>
+
+<pre>
+event.preventDefault()
+</pre>
+
+<p><cite>.preventDefault()</cite> is a property of the Event object and it simply tells the browser not to perform those built-in behaviors.  It's usually a good idea to execute <cite>.preventDefault()</cite>.  And it should probably be the first line of code in your handler.</p>
+
+<pre>
+object.on ("click", event =>
+{
+    event.preventDefault();
+    //	some code...
+}
+</pre>
+
+
